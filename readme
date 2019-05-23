@@ -1,7 +1,11 @@
 
+environment command:
+1.python 3.x
+2.pip install --> requests lxml beautiful4
+3.You must be login pixiv with your account, This crawler use shadowsocks
 
 
-2019.01.10
-1.I want to make a crawler for pixiv to get the works that I followed painter;
-2.How I do this? I don't know Python. OK, Let me learn it !
+Usage:
+
+python get_painter.py
 
