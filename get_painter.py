@@ -7,12 +7,14 @@ import os
 
 class Member_illust:
     def __init__(self):
-        self.pixiv = Pixiv()  # 实例化Pixiv
-        self.se = self.pixiv.se  # 传递se3984129
+        self.pixiv = Pixiv()
+        self.se = self.pixiv.se
         self.uid = "12539859"
         self.pixiv.load_path = "/Users/luoyunfu/Downloads/pixivpic/" + self.uid + "/"
-        self.all_url = "https://www.pixiv.net/ajax/user/" + self.uid + "/profile/all"  # 获取所有插图作品目录
-        self.medium_url = "https://www.pixiv.net/member_illust.php?mode=medium&illust_id="  # 获取插图主页的url
+        # get all contents of illust
+        self.all_url = "https://www.pixiv.net/ajax/user/" + self.uid + "/profile/all"
+        # get illust main url
+        self.medium_url = "https://www.pixiv.net/member_illust.php?mode=medium&illust_id="
 
     def get_Member_illust(self):
         if os.path.exists(self.pixiv.load_path) == False:
@@ -22,15 +24,15 @@ class Member_illust:
         illusts = obj["body"]["illusts"]
 
         if illusts == None:
-            print("获取作品目录失败")
+            print("Get all contents of illust failed!")
             return
-        print("已获取所有插画作品")
+        print("Already got all contents of illust")
 
+        # creat a list to record pictures which has been downloaded
         list = []
 
-        # 获取已下载的图片id并保存到list，防止再次下载
         for file in os.listdir(self.pixiv.load_path):
-            list.append(file.replace(".jpg", ""))  # ！！！有可能是png图片，就不能筛除了
+            list.append(file.replace(".jpg", ""))  # Note! this maybe is a '.png' picture
 
         for illust in illusts:
             if illust in list:
@@ -47,7 +49,7 @@ class Member_illust:
                 img_file = self.pixiv.download_Img(img_url, page_url, illust)
 
                 if img_file == None:
-                    print("下载失败", illust)
+                    print("download failed : ", illust)
                     if try_times == 1:
                         break
                     else:
@@ -59,7 +61,7 @@ class Member_illust:
                 img_url = img_url[:67] + str(num) + img_url[-4:]
                 num += 1
 
-        print("已获取排行榜数据")
+        print("Already get all pictures of ", self.uid)
 
     def start(self):
         if self.pixiv.login():
