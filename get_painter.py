@@ -26,18 +26,10 @@ class Member_illust:
         if illusts == None:
             print("Get all contents of illust failed!")
             return
+
         print("Already got all contents of illust")
 
-        # creat a list to record pictures which has been downloaded
-        list = []
-
-        for file in os.listdir(self.pixiv.load_path):
-            list.append(file.replace(".jpg", ""))  # Note! this maybe is a '.png' picture
-
         for illust in illusts:
-            if illust in list:
-                continue
-
             page_url = self.medium_url + illust
             img_url = self.pixiv.get_Imgs_Url(page_url)
 
@@ -58,6 +50,8 @@ class Member_illust:
                 else:
                     try_times = 0
 
+                # https://i.pximg.net/img-original/img/2019/05/24/15/01/48/74877650_p0.png
+                # add p0/p1/p2...
                 img_url = img_url[:67] + str(num) + img_url[-4:]
                 num += 1
 

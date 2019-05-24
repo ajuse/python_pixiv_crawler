@@ -57,11 +57,18 @@ class Pixiv:
         return False
 
     def download_Img(self, img_url, referer, title):
-        src = img_url
+        # from img_url = 'https://i.pximg.net/img-original/img/2019/05/24/15/01/48/74877650_p0.png'
+        # get '2019/05/24/15/01/48/74877650_p0.png' and replace to '2019_05_24_15_01_48_74877650_p0.png'
+        pic_name = img_url[37:].replace('/', '_')
+
+        if os.path.exists(os.path.join(self.load_path, pic_name)):
+            print('Already save the picture : ', pic_name)
+            return os.path.join(self.load_path, pic_name)
+
         src_headers = self.headers
         src_headers['Referer'] = referer  # there must have a referer
         try:
-            html = requests.get(src, headers=src_headers, proxies=self.proxies)
+            html = requests.get(img_url, headers=src_headers, proxies=self.proxies)
             # check html is response 200
             if "[200]" not in str(html):
                 return None
@@ -71,18 +78,11 @@ class Pixiv:
             print('download failed: ', img_url)
             return None
 
-        if os.path.exists(os.path.join(self.load_path, title + '.jpg')):
-            for i in range(1, 100):
-                if not os.path.exists(os.path.join(self.load_path, title + str(i) + '.jpg')):
-                    title = title + str(i)
-                    break
-        # Note! this can't deal with '.png'
-
         print('downloading: ' + title)
         with open(os.path.join(self.load_path, title + '.jpg'), 'ab') as f:
             f.write(img)
 
-        return os.path.join(self.load_path, title + '.jpg')
+        return os.path.join(self.load_path, pic_name)
 
     def get_Imgs_Url(self, img_url):
         html = self.get_Html(img_url)
