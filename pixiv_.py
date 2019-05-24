@@ -8,7 +8,6 @@ import config
 
 # creat a class of pixiv
 class Pixiv:
-
     def __init__(self):
         self.se = requests.session()
         self.base_url = 'https://accounts.pixiv.net/login?lang=zh&source=pc&view_type=page&ref=wwwtop_accounts_index'
@@ -25,9 +24,9 @@ class Pixiv:
         }
         self.pixiv_id = config.pixiv_username
         self.password = config.pixiv_passwd
+        self.load_path = config.pixiv_save_path
         self.post_key = []
         self.return_to = 'http://www.pixiv.net/'
-        self.load_path = '/Users/luoyunfu/Downloads/pixivpic/'
 
     def login(self):
         post_key_html = self.se.get(self.base_url, headers=self.headers, proxies=self.proxies).text
@@ -56,17 +55,20 @@ class Pixiv:
 
         return False
 
-    def download_Img(self, img_url, referer, title):
+    def download_Img(self, img_url, referer, painter_id):
         # from img_url = 'https://i.pximg.net/img-original/img/2019/05/24/15/01/48/74877650_p0.png'
         # get '2019/05/24/15/01/48/74877650_p0.png' and replace to '2019_05_24_15_01_48_74877650_p0.png'
         pic_name = img_url[37:].replace('/', '_')
+        
+        painter_path = self.load_path + painter_id + '/'
 
-        if os.path.exists(os.path.join(self.load_path, pic_name)):
+        if os.path.exists(os.path.join(painter_path, pic_name)):
             print('Already save the picture : ', pic_name)
-            return os.path.join(self.load_path, pic_name)
+            return os.path.join(painter_path, pic_name)
 
         src_headers = self.headers
         src_headers['Referer'] = referer  # there must have a referer
+
         try:
             html = requests.get(img_url, headers=src_headers, proxies=self.proxies)
             # check html is response 200
@@ -78,11 +80,10 @@ class Pixiv:
             print('download failed: ', img_url)
             return None
 
-        print('downloading: ' + title)
-        with open(os.path.join(self.load_path, title + '.jpg'), 'ab') as f:
+        with open(os.path.join(painter_path, pic_name), 'ab') as f:
             f.write(img)
 
-        return os.path.join(self.load_path, pic_name)
+        return os.path.join(painter_path, pic_name)
 
     def get_Imgs_Url(self, img_url):
         html = self.get_Html(img_url)
