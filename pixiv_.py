@@ -25,6 +25,7 @@ class Pixiv:
         self.pixiv_id = config.pixiv_username
         self.password = config.pixiv_passwd
         self.load_path = config.pixiv_save_path
+        self.deadline = config.deadline
         self.post_key = []
         self.return_to = 'http://www.pixiv.net/'
 

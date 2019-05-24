@@ -31,6 +31,11 @@ class Member_illust:
         for illust in illusts:
             page_url = "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + illust
             img_url = self.pixiv.get_Imgs_Url(page_url)
+            pic_date = img_url[37:47].replace('/', '')
+
+            # download images from deadline
+            if self.pixiv.deadline != None and self.pixiv.deadline > pic_date:
+                break
 
             num = 1
             try_times = 0
