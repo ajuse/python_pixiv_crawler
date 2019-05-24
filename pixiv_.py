@@ -25,7 +25,7 @@ class Pixiv:
         self.pixiv_id = config.pixiv_username
         self.password = config.pixiv_passwd
         self.load_path = config.pixiv_save_path
-        self.deadline = config.deadline
+        self.deadline = config.pixiv_deadline
         self.post_key = []
         self.return_to = 'http://www.pixiv.net/'
 
@@ -75,11 +75,12 @@ class Pixiv:
             # check html is response 200
             if "[200]" not in str(html):
                 return None
+
             img = html.content
 
         except:  # something is wrong and give up this picture
             print('download failed: ', img_url)
-            return None
+            return 0
 
         with open(os.path.join(painter_path, pic_name), 'ab') as f:
             f.write(img)
@@ -100,7 +101,7 @@ class Pixiv:
             return self.se.get(url, headers=self.headers, timeout=timeout, proxies=self.proxies).content
         except:
             if num_entries > 0:
-                print(url + ' fail, will reload after ' + timeout + ' second')
+                print(url + ' fail, will reload after ' + str(timeout) + ' second')
                 time.sleep(timeout)
                 return self.get_Html(url, timeout, num_entries=num_entries - 1)
             else:
@@ -108,6 +109,7 @@ class Pixiv:
 
     def mkdir(self, path):
         path = path.strip()
+
         is_exist = os.path.exists(os.path.join(self.load_path, path))
         if not is_exist:
             print('creat ' + path + ' directory')

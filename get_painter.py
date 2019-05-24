@@ -44,13 +44,14 @@ class Member_illust:
 
                 img_file = self.pixiv.download_Img(img_url, page_url, painter_id)
 
-                if img_file == None:
-                    print("download failed : ", illust)
+                if img_file == 0:  # try it again
                     if try_times == 1:
                         break
                     else:
                         try_times += 1
                         continue
+                elif img_file == None:
+                    break
                 else:
                     try_times = 0
 
@@ -63,7 +64,7 @@ class Member_illust:
 
     def start(self):
         if self.pixiv.login():
-            self.get_Member_illust('74877650')
+            self.get_Member_illust('6662895')
 
 
 if __name__ == "__main__":
