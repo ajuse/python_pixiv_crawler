@@ -89,10 +89,14 @@ class Pixiv:
 
     def get_Imgs_Url(self, img_url):
         html = self.get_Html(img_url)
-        img_soup = BeautifulSoup(html, 'lxml')
+        img_soup = BeautifulSoup(html, 'html.parser')
         img_soup_str = str(img_soup)
-        if "original" not in img_soup_str:
+
+        if '\"original\"' not in img_soup_str:
+            print(img_soup)
+
             return None
+
         img_info = img_soup_str[img_soup_str.index("original") + 11: img_soup_str.index("tags") - 4]
         return img_info.replace("\\", "")
 

@@ -1,7 +1,7 @@
 
 environment command:
 1.python 3.x
-2.pip install --> requests lxml beautiful4
+2.pip install --> requests[socks] lxml beautifulsoup4
 3.You must be login pixiv with your account, This crawler use shadowsocks
 
 
