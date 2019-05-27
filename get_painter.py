@@ -97,27 +97,44 @@ class Member_illust:
         return all_illustrator_list
 
     def get_bookmask_all_illustrator(self):
-        url_base = [
-            # public illustrator
-            'https://www.pixiv.net/bookmark.php?type=user&rest=show',
-            # hide illustrator
-            'https://www.pixiv.net/bookmark.php?type=user&rest=hide']
+        all_uid_list = []
+        if os.path.exists('./save_all_bookmask') == False:
+            url_base = [
+                # hide illustrator
+                'https://www.pixiv.net/bookmark.php?type=user&rest=hide',
+                # public illustrator
+                'https://www.pixiv.net/bookmark.php?type=user&rest=show'
+                ]
 
-        for url in url_base:
-            pub_list = self.get_illustrator_list(url)
+            for url in url_base:
+                all_uid_list += self.get_illustrator_list(url)
 
-            print('download list:', pub_list)
+            with open('./save_all_bookmask', 'w') as f:
+                for uid in all_uid_list:
+                    f.write(uid + '\n')
+        else:
+            with open('./save_all_bookmask', 'r') as f:
+                uid = f.readline()
+                while uid:
+                    all_uid_list.append(uid.strip('\n'))
+                    uid = f.readline()
 
-            if pub_list != None:
-                for i in pub_list:
-                    print('start download illustrator: ', i)
-                    self.get_Member_illust(i)
+        print(all_uid_list)
+
+        if len(all_uid_list) == 0:
+            print('no illustrator to download')
+            return
+
+        print('download list:', all_uid_list)
+
+        for i in all_uid_list:
+            print('start download illustrator: ', i)
+            self.get_Member_illust(i)
 
     def start(self):
         if self.pixiv.login():
-            self.get_Member_illust('3188698')
-            # self.get_bookmask_all_illustrator()
-
+            # self.get_Member_illust('3188698')
+            self.get_bookmask_all_illustrator()
 
 if __name__ == "__main__":
     Member_illust().start()
