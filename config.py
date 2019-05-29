@@ -1,4 +1,4 @@
-# 配置文件用.py
+# config file
 
 pixiv_username = "your_username"
 pixiv_passwd = "your_password"

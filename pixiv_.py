@@ -56,13 +56,11 @@ class Pixiv:
 
         return False
 
-    def download_Img(self, img_url, referer, painter_id):
+    def download_Img(self, img_url, referer, painter_id, painter_path):
         # from img_url = 'https://i.pximg.net/img-original/img/2019/05/24/15/01/48/74877650_p0.png'
         # get '2019/05/24/15/01/48/74877650_p0.png' and replace to '2019_05_24_15_01_48_74877650_p0.png'
         pic_name = img_url[37:].replace('/', '_')
         
-        painter_path = self.load_path + painter_id + '/'
-
         if os.path.exists(os.path.join(painter_path, pic_name)):
             print('Already save the picture : ', pic_name)
             return os.path.join(painter_path, pic_name)

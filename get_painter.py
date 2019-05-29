@@ -46,7 +46,7 @@ class Member_illust:
             while True:
                 print("downloading url: ", img_url)
 
-                img_file = self.pixiv.download_Img(img_url, page_url, painter_id)
+                img_file = self.pixiv.download_Img(img_url, page_url, painter_id, painter_path) 
 
                 if img_file == 0:  # try it again
                     if try_times == 1:
