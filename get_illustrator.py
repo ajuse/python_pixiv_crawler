@@ -10,17 +10,17 @@ class Member_illust:
     def __init__(self):
         self.pixiv = Pixiv()
 
-    def get_Member_illust(self, painter_id):
-        if painter_id == None:
+    def get_Member_illust(self, illustrator_id):
+        if illustrator_id == None:
             return
 
-        painter_path = self.pixiv.load_path + painter_id
-        painter_all_url = "https://www.pixiv.net/ajax/user/" + painter_id + "/profile/all"
+        illustrator_path = self.pixiv.load_path + illustrator_id
+        illustrator_all_url = "https://www.pixiv.net/ajax/user/" + illustrator_id + "/profile/all"
 
-        if os.path.exists(painter_path) == False:
-            os.mkdir(painter_path)
+        if os.path.exists(illustrator_path) == False:
+            os.mkdir(illustrator_path)
 
-        obj = json.loads(self.pixiv.get_Html(painter_all_url))
+        obj = json.loads(self.pixiv.get_Html(illustrator_all_url))
         illusts = obj["body"]["illusts"]
 
         if illusts == None:
@@ -46,7 +46,7 @@ class Member_illust:
             while True:
                 print("downloading url: ", img_url)
 
-                img_file = self.pixiv.download_Img(img_url, page_url, painter_id, painter_path) 
+                img_file = self.pixiv.download_Img(img_url, page_url, illustrator_path)
 
                 if img_file == 0:  # try it again
                     if try_times == 1:
@@ -64,7 +64,7 @@ class Member_illust:
                 img_url = img_url[:67] + str(num) + img_url[-4:]
                 num += 1
 
-        print("Already get all pictures of ", painter_id)
+        print("Already get all pictures of ", illustrator_id)
 
     def get_illustrator_list(self, illustrator_url):
         html = self.pixiv.get_Html(illustrator_url)
@@ -89,8 +89,8 @@ class Member_illust:
             attention_url = illustrator_url + '&p=' + str(page)
             attention_html = self.pixiv.get_Html(attention_url)
             illustrator_soup = BeautifulSoup(attention_html, 'lxml')
-            illustrators = illustrator_soup.find_all(class_="userdata")
-            illustrator_list = re.findall(re.compile('data-user_id="(.*?)"', re.S), str(illustrators))
+            illustrator = illustrator_soup.find_all(class_="userdata")
+            illustrator_list = re.findall(re.compile('data-user_id="(.*?)"', re.S), str(illustrator))
 
             all_illustrator_list += illustrator_list
 
