@@ -132,7 +132,7 @@ class Member_illust:
             if is_update == False:
                 self.get_Member_illust(i, self.pixiv.load_path + i)
             else:
-                self.get_Member_illust(i, self.pixiv.deadline)
+                self.get_Member_illust(i, self.pixiv.load_path + self.pixiv.deadline)
 
     def start(self):
         arg = sys.argv[1]

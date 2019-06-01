@@ -7,5 +7,11 @@ environment command:
 
 Usage:
 
-python get_illustrator.py
+1. download all illustrators.
+   python get_illustrator.py all
 
+2. download user defined illustrator.
+   python get_illustrator.py illustrator 20980424
+
+3. download update all bookmask illustrators picture since user defined date.
+   python get_illustrator.py update 20190601
