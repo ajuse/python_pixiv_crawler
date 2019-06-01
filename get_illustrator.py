@@ -1,20 +1,20 @@
 # coding=utf-8
 
-from pixiv_ import Pixiv
+from pixiv import Pixiv
 import json
 import os
 from bs4 import BeautifulSoup
 import re
+import sys
 
 class Member_illust:
     def __init__(self):
         self.pixiv = Pixiv()
 
-    def get_Member_illust(self, illustrator_id):
+    def get_Member_illust(self, illustrator_id, illustrator_path):
         if illustrator_id == None:
             return
 
-        illustrator_path = self.pixiv.load_path + illustrator_id
         illustrator_all_url = "https://www.pixiv.net/ajax/user/" + illustrator_id + "/profile/all"
 
         if os.path.exists(illustrator_path) == False:
@@ -96,7 +96,7 @@ class Member_illust:
 
         return all_illustrator_list
 
-    def get_bookmask_all_illustrator(self):
+    def get_bookmask_all_illustrator(self, is_update):
         all_uid_list = []
         if os.path.exists('./save_all_bookmask') == False:
             url_base = [
@@ -129,12 +129,33 @@ class Member_illust:
 
         for i in all_uid_list:
             print('start download illustrator: ', i)
-            self.get_Member_illust(i)
+            if is_update == False:
+                self.get_Member_illust(i, self.pixiv.load_path + i)
+            else:
+                self.get_Member_illust(i, self.pixiv.deadline)
 
     def start(self):
+        arg = sys.argv[1]
+
         if self.pixiv.login():
+            if arg == 'all':
+                print('download all illustrators')
+                self.get_bookmask_all_illustrator(False)
+            elif arg == 'illustrator':
+                uid = sys.argv[2]
+                print('download', uid, 'picture')
+                self.get_Member_illust(uid, self.pixiv.load_path + uid)
+            elif arg == 'update':
+                self.pixiv.deadline = sys.argv[2]
+                print('download update all bookmask illustrators picture since ', self.pixiv.deadline)
+                self.get_bookmask_all_illustrator(True)
+            else:
+                print('ERROR args')
+                return
+
+        # if self.pixiv.login():
             # self.get_Member_illust('3188698')
-            self.get_bookmask_all_illustrator()
+            #
 
 if __name__ == "__main__":
     Member_illust().start()
